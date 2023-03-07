@@ -40,11 +40,25 @@ const ShoeCard = ({
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
+          <Price
+            style={{
+              "--color": variant === "on-sale" && COLORS.gray[700],
+              "--text-decoration": variant === "on-sale" && "line-through",
+            }}
+          >
+            {formatPrice(price)}
+          </Price>
         </Row>
         <Row>
           <ColorInfo>{pluralize("Color", numOfColors)}</ColorInfo>
+          {variant === "on-sale" && (
+            <SalePrice>{formatPrice(salePrice)}</SalePrice>
+          )}
         </Row>
+        {variant === "new-release" && (
+          <JustReleased>Just released!</JustReleased>
+        )}
+        {variant === "on-sale" && <OnSale>Sale</OnSale>}
       </Wrapper>
     </Link>
   );
@@ -55,7 +69,9 @@ const Link = styled.a`
   color: inherit;
 `;
 
-const Wrapper = styled.article``;
+const Wrapper = styled.article`
+  position: relative;
+`;
 
 const ImageWrapper = styled.div`
   position: relative;
@@ -63,10 +79,13 @@ const ImageWrapper = styled.div`
 
 const Image = styled.img`
   width: 100%;
+  border-radius: 1rem 1rem 0.25rem 0.25rem;
 `;
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -74,7 +93,10 @@ const Name = styled.h3`
   color: ${COLORS.gray[900]};
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+  color: var(--color);
+  text-decoration: var(--text-decoration);
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
@@ -83,6 +105,30 @@ const ColorInfo = styled.p`
 const SalePrice = styled.span`
   font-weight: ${WEIGHTS.medium};
   color: ${COLORS.primary};
+`;
+
+const Label = styled.div`
+  position: absolute;
+  top: 0.75rem;
+  right: -0.25rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+  padding: 0 0.5rem;
+  margin: auto;
+  border-radius: 0.125rem;
+  color: ${COLORS.white};
+  font-size: 0.875rem;
+  font-weight: ${WEIGHTS.bold};
+`;
+
+const JustReleased = styled(Label)`
+  background-color: ${COLORS.secondary};
+`;
+
+const OnSale = styled(Label)`
+  background-color: ${COLORS.primary};
 `;
 
 export default ShoeCard;
